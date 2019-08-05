@@ -1,0 +1,60 @@
+<h2>Sing up</h2>
+<p>You can sign up to our Barber Shop on this page.</p>
+<form action="/visit" method="POST">
+
+  <div class="form-group">
+    <label>Select a headresser</label>
+    <select name="headresser" class="form-control">
+      <option selected><%=@headresser%></option>
+      <option>Any headresser</option>
+      <option>Walter White</option>
+      <option>Jessie Pinkman</option>
+      <option>Gus Fring</option>
+    </select>
+  </div>
+
+  <div class="form-group">
+    <label>Your name</label>
+    <input name="client_name" type="text" class="form-control" placeholder="Enter your name" value="<%=@client_name%>">
+  </div>
+
+    <div class="form-group">
+    <label>Your phone</label>
+    <input name="client_phone" type="text" class="form-control" placeholder="Enter your phone" value="<%=@client_phone%>">
+  </div>
+
+  <div class="form-group">
+    <label>Date and Time</label>
+    <input name="date_time" type="text" class="form-control" placeholder="Enter desired time" value="<%=@date_time%>">
+  </div>
+
+  <div class="form-group">
+    <label>Select color to paint your hair:</label>
+    <select id="color" name="color">
+      <option value="#7bd148">Green</option>
+      <option value="#5484ed">Bold blue</option>
+      <option value="#a4bdfc">Blue</option>
+      <option value="#46d6db">Turquoise</option>
+      <option value="#7ae7bf">Light green</option>
+      <option value="#51b749">Bold green</option>
+      <option value="#fbd75b">Yellow</option>
+      <option value="#ffb878">Orange</option>
+      <option value="#ff887c">Red</option>
+      <option value="#dc2127">Bold red</option>
+      <option value="#dbadff">Purple</option>
+      <option value="#e1e1e1">Gray</option>
+    </select>
+  </div>
+
+ 
+  <button type="submit" class="btn btn-primary">Submit</button>
+</form>
+
+
+<script type="text/javascript">
+  $(function(){
+    // тут пишем любой javascript код, который исполнится
+    // ПОСЛЕ загрузки страницы
+    $('#color').simplecolorpicker();
+  });
+</script> 

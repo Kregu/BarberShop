@@ -1,0 +1,19 @@
+<h2>Hello!</h2>
+<p>Our phone: 1112222</p>
+<p>Our email: barbershop@shops.com</p><br><br>
+
+
+<p>This is feedback form</p>
+<form action="/contacts" method="POST">
+  <div class="form-group">
+    <label >Your email</label>
+    <input name="client_email" type="email" class="form-control" placeholder="Enter email" value="<%=@client_email%>">
+  </div>
+
+  <div class="form-group">
+    <label >Your message for us</label>
+    <textarea name="client_message" class="form-control" rows="3" placeholder="Enter a message"><%=@client_message%></textarea>
+  </div>
+
+  <button type="submit" class="btn btn-primary">Submit</button>
+</form>
