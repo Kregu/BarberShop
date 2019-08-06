@@ -5,9 +5,14 @@ require 'pony'
 require 'yaml'
 require 'sqlite3'
 
+
+def get_db
+  return SQLite3::Database.new 'barbershop.db'
+end
+
 configure do
-@db = SQLite3::Database.new 'barbershop.db'
-@db.execute 'CREATE TABLE IF NOT EXISTS "Users" (
+db = get_db
+db.execute 'CREATE TABLE IF NOT EXISTS "Users" (
   "Id"  INTEGER PRIMARY KEY AUTOINCREMENT,
   "Name"  TEXT,
   "Phone" TEXT,
@@ -87,6 +92,20 @@ post '/visit' do
   f = File.open './public/users.txt', 'a'
   f.write "headresser: #{@headresser}, client: #{@client_name}, phone: #{@client_phone}, date and time: #{@date_time}, color: #{@color}.\n"
   f.close
+
+  db = get_db
+  db.execute 'INSERT INTO Users
+                        (
+                        Name,
+                        Phone,
+                        DateStamp,
+                        Barber,
+                        Color
+                        )
+                        VALUES (?,?,?,?,?)', [@client_name, @client_phone, @date_time, @headresser, @color]
+
+
+
 
   # where_user_came_from = session[:previous_url] || '/'
   erb @message
