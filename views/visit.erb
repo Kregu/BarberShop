@@ -1,5 +1,16 @@
 <h2>Sing up</h2>
 <p>You can sign up to our Barber Shop on this page.</p>
+
+<script type="text/javascript">
+
+  $(function(){
+    // тут пишем любой javascript код, который исполнится
+    // ПОСЛЕ загрузки страницы
+    $('#color').simplecolorpicker();
+    $('#datetimepicker').datetimepicker();
+  });
+</script> 
+
 <form action="/visit" method="POST">
 
   <div class="form-group">
@@ -25,7 +36,7 @@
 
   <div class="form-group">
     <label>Date and Time</label>
-    <input name="date_time" type="text" class="form-control" placeholder="Enter desired time" value="<%=@date_time%>">
+    <input id="datetimepicker" name="date_time" type="text" class="form-control" placeholder="Enter desired time" value="<%=@date_time%>">
   </div>
 
   <div class="form-group">
@@ -49,12 +60,3 @@
  
   <button type="submit" class="btn btn-primary">Submit</button>
 </form>
-
-
-<script type="text/javascript">
-  $(function(){
-    // тут пишем любой javascript код, который исполнится
-    // ПОСЛЕ загрузки страницы
-    $('#color').simplecolorpicker();
-  });
-</script> 
