@@ -12,3 +12,6 @@ headresser: Walter White, client: Garry, phone: 99999888, date and time: Thursda
 headresser: Jessie Pinkman, client: serg, phone: 99999888, date and time: Thursday 22:55, color: #7bd148.
 headresser: Gus Fring, client: Garry, phone: 99999888, date and time: Thursday 22:55, color: #7bd148.
 headresser: Walter White, client: Garry, phone: 99999888, date and time: Thursday 22:55, color: #7bd148.
+headresser: Walter White, client: Garry, phone: 212121, date and time: 2019/08/03 15:00, color: #46d6db.
+headresser: Walter White, client: serg, phone: 99999888, date and time: 2019/08/30 15:00, color: #dc2127.
+headresser: Jessie Pinkman, client: Garry, phone: 12224444, date and time: 2019/08/17 11:00, color: #5484ed.
