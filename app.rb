@@ -4,10 +4,13 @@ require 'sinatra/reloader' if development?
 require 'pony'
 require 'yaml'
 require 'sqlite3'
+require 'builder'
 
 
 def get_db
-  return SQLite3::Database.new 'barbershop.db'
+  db = SQLite3::Database.new 'barbershop.db'
+  db.results_as_hash = true
+  return db
 end
 
 configure do
@@ -173,4 +176,40 @@ end
 
 get '/secure/place' do
   erb 'This is a secret place that only <%=session[:identity]%> has access to!'
+end
+
+
+get '/showusers' do
+  @usersdata = []
+  db = get_db
+  db.execute 'SELECT * FROM USERS' do |row|
+    @usersdata << row
+  end
+# ==================================
+# variant 1
+# ==================================
+  # xm = Builder::XmlMarkup.new(:indent => 2)
+  # xm.table {
+  # xm.tr { @usersdata[0].keys.each { |key| xm.th(key)}}
+  # @usersdata.each { |row| xm.tr { row.values.each { |value| xm.td(value)}}}
+  # }
+  # erb "#{xm}"
+
+# ==================================
+# variant 2
+# ==================================
+  class Array 
+    def to_cells(tag)
+      self.map { |c| "<#{tag}>#{c}</#{tag}>" }.join
+    end
+  end
+
+  @headers = "<tr>#{@usersdata[0].keys.to_cells('th')}</tr>"
+
+  @cells = @usersdata.map do |row|
+    "<tr>#{row.values.to_cells('td')}</tr>"
+  end.join("\n  ")
+
+  erb :showusers
+  
 end
