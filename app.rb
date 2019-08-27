@@ -24,6 +24,11 @@ db.execute 'CREATE TABLE IF NOT EXISTS "Users" (
   "Color" TEXT
 )'
 
+db.execute 'CREATE TABLE IF NOT EXISTS "Barbers" (
+  "Id"  INTEGER PRIMARY KEY AUTOINCREMENT,
+  "Barber"  TEXT
+)'
+
 end
 
 
@@ -55,6 +60,14 @@ end
 
 get '/visit' do
   @headresser = "Any headresser"
+  @barbersdata = []
+
+  db = get_db
+  db.execute 'SELECT Barber FROM Barbers' do |row|
+    # tmp = row.values
+    @barbersdata << row.values.join
+  end
+
   erb :visit
 end
 
@@ -77,6 +90,8 @@ post '/visit' do
   @client_phone = params[:client_phone]
   @date_time = params[:date_time]
   @color = params[:color]
+
+  @client_name.capitalize!
 
   hh = {:client_name => "You did't enter your name",
         :client_phone => "You did't enter your phone",
@@ -211,5 +226,5 @@ get '/showusers' do
   end.join("\n  ")
 
   erb :showusers
-  
+
 end
