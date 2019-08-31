@@ -62,6 +62,14 @@ before '/secure/*' do
   end
 end
 
+before '/visit' do
+  @barbersdata = []
+  db = get_db
+  db.execute 'SELECT Barber FROM Barbers' do |row|
+    @barbersdata << row.values.join
+  end
+end
+
 get '/' do
   erb 'Hello dear friend!'
 end
@@ -72,13 +80,6 @@ end
 
 get '/visit' do
   @headresser = "Any headresser"
-  @barbersdata = []
-
-  db = get_db
-  db.execute 'SELECT Barber FROM Barbers' do |row|
-    # tmp = row.values
-    @barbersdata << row.values.join
-  end
 
   erb :visit
 end
@@ -97,6 +98,7 @@ get '/sign_up' do
 end
 
 post '/visit' do
+  
   @headresser = params[:headresser]
   @client_name = params[:client_name]
   @client_phone = params[:client_phone]
@@ -116,9 +118,8 @@ post '/visit' do
     return erb :visit
   end
   
-  @message = "Dear #{@client_name}, we wait you at #{@date_time}, your color #{@color}, your headresser #{@headresser}."
-
-
+  # @message = "Dear #{@client_name}, we wait you at #{@date_time}, your color #{@color}, your headresser #{@headresser}."
+  
   f = File.open './public/users.txt', 'a'
   f.write "headresser: #{@headresser}, client: #{@client_name}, phone: #{@client_phone}, date and time: #{@date_time}, color: #{@color}.\n"
   f.close
@@ -136,9 +137,9 @@ post '/visit' do
 
 
 
-
+  erb "<h3>Thank you! You are signed up.</h3>"
   # where_user_came_from = session[:previous_url] || '/'
-  erb @message
+  # erb @message
 end
 
 post '/contacts' do
