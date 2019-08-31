@@ -7,6 +7,18 @@ require 'sqlite3'
 require 'builder'
 
 
+def is_barber_exists? db, barber
+  db.execute('SELECT * FROM Barbers WHERE Barber=?', [barber]).length > 0
+end
+
+def seed_db db, barbers
+  barbers.each do |barber|
+    unless is_barber_exists? db, barber
+      db.execute 'INSERT INTO Barbers (Barber) VALUES (?)', [barber]
+    end
+  end
+end
+
 def get_db
   db = SQLite3::Database.new 'barbershop.db'
   db.results_as_hash = true
@@ -14,26 +26,26 @@ def get_db
 end
 
 configure do
-db = get_db
-db.execute 'CREATE TABLE IF NOT EXISTS "Users" (
-  "Id"  INTEGER PRIMARY KEY AUTOINCREMENT,
-  "Name"  TEXT,
-  "Phone" TEXT,
-  "DateStamp" TEXT,
-  "Barber"  TEXT,
-  "Color" TEXT
-)'
 
-db.execute 'CREATE TABLE IF NOT EXISTS "Barbers" (
-  "Id"  INTEGER PRIMARY KEY AUTOINCREMENT,
-  "Barber"  TEXT
-)'
+  db = get_db
+  db.execute 'CREATE TABLE IF NOT EXISTS "Users" (
+    "Id"  INTEGER PRIMARY KEY AUTOINCREMENT,
+    "Name"  TEXT,
+    "Phone" TEXT,
+    "DateStamp" TEXT,
+    "Barber"  TEXT,
+    "Color" TEXT
+  )'
 
-end
+  db.execute 'CREATE TABLE IF NOT EXISTS "Barbers" (
+    "Id"  INTEGER PRIMARY KEY AUTOINCREMENT,
+    "Barber"  TEXT
+  )'
 
+  seed_db db, ["Walter White", "Jessie Pinkman", "Gus Fring", "Mike Ehrmantraut"]
 
-configure do
   enable :sessions
+
 end
 
 helpers do
