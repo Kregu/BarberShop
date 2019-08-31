@@ -16,11 +16,11 @@
   <div class="form-group">
     <label>Select a headresser</label>
     <select name="headresser" class="form-control">
-      <option selected><%=@headresser%></option>
-      <option>Any headresser</option>
-      <option><%=@barbersdata[0]%></option>
-      <option><%=@barbersdata[1]%></option>
-      <option><%=@barbersdata[2]%></option>
+
+    <%@barbersdata.each do |item| %>
+      <option <%='selected' if @headresser == item%>><%=item%></option>
+    <%end%>
+
     </select>
   </div>
 

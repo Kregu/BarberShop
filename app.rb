@@ -79,8 +79,6 @@ get '/about' do
 end
 
 get '/visit' do
-  @headresser = "Any headresser"
-
   erb :visit
 end
 
@@ -118,8 +116,6 @@ post '/visit' do
     return erb :visit
   end
   
-  # @message = "Dear #{@client_name}, we wait you at #{@date_time}, your color #{@color}, your headresser #{@headresser}."
-  
   f = File.open './public/users.txt', 'a'
   f.write "headresser: #{@headresser}, client: #{@client_name}, phone: #{@client_phone}, date and time: #{@date_time}, color: #{@color}.\n"
   f.close
@@ -134,7 +130,6 @@ post '/visit' do
                         Color
                         )
                         VALUES (?,?,?,?,?)', [@client_name, @client_phone, @date_time, @headresser, @color]
-
 
 
   erb "<h3>Thank you! You are signed up.</h3>"
