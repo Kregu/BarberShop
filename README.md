@@ -2,7 +2,7 @@
 
 RubySchool, Lesson 26
 
-Continue to make the Barbershop application on sinatra-bootstrap.
+Continue to make the Barbershop application on [sinatra-bootstrap](https://github.com/bootstrap-ruby/sinatra-bootstrap).
 
 (added sqlite3 database to save data)
 
