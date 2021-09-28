@@ -1,24 +1,15 @@
 # BarberShop
-====
 
-This is a demonstrator for [Sinatra](http://www.sinatrarb.com/) and [Twitter Bootstrap](http://getbootstrap.com/).
+RubySchool, Lesson 26
 
-Use it as a boilerplate to start your own apps.
+Continue to make the Barbershop application on sinatra-bootstrap.
 
-Go!
-===
+(added sqlite3 database to save data)
 
-Download and run sinatra-bootstrap:
+    git clone https://github.com/Kregu/RubySchool_lesson_24
 
-    git clone https://github.com/bootstrap-ruby/sinatra-bootstrap
-
-    cd sinatra-bootstrap
-    bundle install             # To install sinatra
+    cd RubySchool_lesson_24
+    bundle install             # To install
 
     bundle exec ruby app.rb    # To run the sample
-
-Then open [http://localhost:4567/](http://localhost:4567/)
-
-What's next?
-============
-- Try the rerun gem to restart Sinatra automatically when you change source files: https://github.com/alexch/rerun
+Then open http://localhost:4567/
