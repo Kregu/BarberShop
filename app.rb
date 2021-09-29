@@ -13,9 +13,7 @@ end
 
 def seed_db db, barbers
   barbers.each do |barber|
-    unless is_barber_exists? db, barber
-      db.execute 'INSERT INTO Barbers (Barber) VALUES (?)', [barber]
-    end
+    db.execute 'INSERT INTO Barbers (Barber) VALUES (?)', [barber] unless is_barber_exists? db, barber
   end
 end
 
@@ -42,7 +40,7 @@ configure do
     "Barber"  TEXT
   )'
 
-  seed_db db, ["Walter White", "Jessie Pinkman", "Gus Fring", "Mike Ehrmantraut"]
+  seed_db db, ['Walter White', 'Jessie Pinkman', 'Gus Fring', 'Mike Ehrmantraut']
 
   enable :sessions
 
@@ -96,7 +94,7 @@ get '/sign_up' do
 end
 
 post '/visit' do
-  
+
   @headresser = params[:headresser]
   @client_name = params[:client_name]
   @client_phone = params[:client_phone]
@@ -105,17 +103,15 @@ post '/visit' do
 
   @client_name.capitalize!
 
-  hh = {:client_name => "You did't enter your name",
-        :client_phone => "You did't enter your phone",
-        :date_time => "Wrong date and time"
+  hh = {client_name: "You did't enter your name",
+        client_phone: "You did't enter your phone",
+        date_time: 'Wrong date and time'
       }
 
-  @error = hh.select {|key,_| params[key] == ""}.values.join(", ")
+  @error = hh.select {|key,_| params[key] == ''}.values.join(', ')
 
-  unless @error == ""
-    return erb :visit
-  end
-  
+  return erb :visit unless @error == ''
+
   f = File.open './public/users.txt', 'a'
   f.write "headresser: #{@headresser}, client: #{@client_name}, phone: #{@client_phone}, date and time: #{@date_time}, color: #{@color}.\n"
   f.close
@@ -132,7 +128,7 @@ post '/visit' do
                         VALUES (?,?,?,?,?)', [@client_name, @client_phone, @date_time, @headresser, @color]
 
 
-  erb "<h3>Thank you! You are signed up.</h3>"
+  erb '<h3>Thank you! You are signed up.</h3>'
   # where_user_came_from = session[:previous_url] || '/'
   # erb @message
 end
@@ -141,14 +137,12 @@ post '/contacts' do
   @client_email = params[:client_email]
   @client_message = params[:client_message]
 
-  cc = {:client_email => "You did't enter your email",
-        :client_message => "You did't enter your message"}
+  cc = {client_email: "You did't enter your email",
+        client_message: "You did't enter your message"}
 
-  @error = cc.select{|key,_| params[key] == ""}.values.join(", ")
+  @error = cc.select{|key,_| params[key] == ''}.values.join(', ')
 
-  unless @error == ""
-    return erb :contacts
-  end
+  return erb :contacts unless @error == ''
 
 
   f = File.open './public/contacts.txt', 'a'
@@ -157,32 +151,32 @@ post '/contacts' do
 
   smtp_info =
     begin
-      YAML.load_file("./smtpinfo.yml")
+      YAML.load_file('./smtpinfo.yml')
     rescue
-      @error = "Error: Could not find SMTP info. Please contact the site administrator."
+      @error = 'Error: Could not find SMTP info. Please contact the site administrator.'
       return erb :contacts
     end
 
 
   Pony.options = {
-  :subject => "art inquiry from #{@client_email}",
-  :body => "#{@client_message}",
-  :via => :smtp,
-  :via_options => {
-    :address              => 'smtp.gmail.com',
-    :port                 => '587',
-    :enable_starttls_auto => true,
-    :user_name            => smtp_info[:username],
-    :password             => smtp_info[:password],
-    :authentication       => :plain, # :plain, :login, :cram_md5, no auth by default
-    :domain               => "localhost.localdomain"
+    subject: "art inquiry from #{@client_email}",
+    body: @client_message.to_s,
+    via: :smtp,
+    via_options: {
+      address: 'smtp.gmail.com',
+      port: '587',
+      enable_starttls_auto: true,
+      user_name: smtp_info[:username],
+      password: smtp_info[:password],
+      authentication: :plain, # :plain, :login, :cram_md5, no auth by default
+      domain: 'localhost.localdomain'
     }
   }
 
-  Pony.mail(:to => "sergey.login+ruby@gmail.com")
+  Pony.mail(to: 'sergey.login+ruby@gmail.com')
 
-  erb @message = "Your feedback is send. Thanks for contacting to us!"
-  
+  erb @message = 'Your feedback is send. Thanks for contacting to us!'
+
 end
 
 
@@ -221,17 +215,19 @@ get '/showusers' do
 # ==================================
 # variant 2
 # ==================================
-  class Array 
+  class Array
     def to_cells(tag)
       self.map { |c| "<#{tag}>#{c}</#{tag}>" }.join
     end
   end
 
-  @headers = "<tr>#{@usersdata[0].keys.to_cells('th')}</tr>"
+  if @usersdata[0]
+    @headers = "<tr>#{@usersdata[0].keys.to_cells('th')}</tr>"
 
-  @cells = @usersdata.map do |row|
-    "<tr>#{row.values.to_cells('td')}</tr>"
-  end.join("\n  ")
+    @cells = @usersdata.map do |row|
+      "<tr>#{row.values.to_cells('td')}</tr>"
+    end.join("\n  ")
+  end
 
   erb :showusers
 
