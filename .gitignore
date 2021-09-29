@@ -2,3 +2,8 @@
 *.db
 users.txt
 contacts.txt
+.idea/vcs.xml
+.idea/modules.xml
+.idea/misc.xml
+.idea/BarberShop.iml
+.idea/.gitignore
