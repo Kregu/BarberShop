@@ -17,7 +17,7 @@
     <label>Select a headresser</label>
     <select name="headresser" class="form-control">
 
-    <%@barbersdata.each do |item| %>
+    <% @barbers_data.each do |item| %>
       <option <%='selected' if @headresser == item%>><%=item%></option>
     <%end%>
 

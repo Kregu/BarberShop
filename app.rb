@@ -6,21 +6,20 @@ require 'yaml'
 require 'sqlite3'
 require 'builder'
 
-
-def is_barber_exists? db, barber
-  db.execute('SELECT * FROM Barbers WHERE Barber=?', [barber]).length > 0
+def barber_exists?(db, barber)
+  db.execute('SELECT * FROM Barbers WHERE Barber=?', [barber]).length.positive?
 end
 
-def seed_db db, barbers
+def seed_db(db, barbers)
   barbers.each do |barber|
-    db.execute 'INSERT INTO Barbers (Barber) VALUES (?)', [barber] unless is_barber_exists? db, barber
+    db.execute 'INSERT INTO Barbers (Barber) VALUES (?)', [barber] unless barber_exists? db, barber
   end
 end
 
 def get_db
   db = SQLite3::Database.new 'barbershop.db'
   db.results_as_hash = true
-  return db
+  db
 end
 
 configure do
@@ -55,16 +54,16 @@ end
 before '/secure/*' do
   unless session[:identity]
     session[:previous_url] = request.path
-    @error = 'Sorry, you need to be logged in to visit ' + request.path
+    @error = "Sorry, you need to be logged in to visit #{request.path}"
     halt erb(:login_form)
   end
 end
 
 before '/visit' do
-  @barbersdata = []
+  @barbers_data = []
   db = get_db
   db.execute 'SELECT Barber FROM Barbers' do |row|
-    @barbersdata << row.values.join
+    @barbers_data << row.values.join
   end
 end
 
@@ -83,7 +82,6 @@ end
 get '/contacts' do
   erb :contacts
 end
-
 
 get '/login/form' do
   erb :login_form
@@ -108,7 +106,7 @@ post '/visit' do
         date_time: 'Wrong date and time'
       }
 
-  @error = hh.select {|key,_| params[key] == ''}.values.join(', ')
+  @error = hh.select { |key,_| params[key] == '' }.values.join(', ')
 
   return erb :visit unless @error == ''
 
@@ -127,7 +125,6 @@ post '/visit' do
                         )
                         VALUES (?,?,?,?,?)', [@client_name, @client_phone, @date_time, @headresser, @color]
 
-
   erb '<h3>Thank you! You are signed up.</h3>'
   # where_user_came_from = session[:previous_url] || '/'
   # erb @message
@@ -140,10 +137,9 @@ post '/contacts' do
   cc = {client_email: "You did't enter your email",
         client_message: "You did't enter your message"}
 
-  @error = cc.select{|key,_| params[key] == ''}.values.join(', ')
+  @error = cc.select { |key, _| params[key] == '' }.values.join(', ')
 
   return erb :contacts unless @error == ''
-
 
   f = File.open './public/contacts.txt', 'a'
   f.write "client email: #{@client_email}\nmessage:\n#{@client_message}\n"
@@ -156,7 +152,6 @@ post '/contacts' do
       @error = 'Error: Could not find SMTP info. Please contact the site administrator.'
       return erb :contacts
     end
-
 
   Pony.options = {
     subject: "art inquiry from #{@client_email}",
@@ -179,7 +174,6 @@ post '/contacts' do
 
 end
 
-
 post '/login/attempt' do
   session[:identity] = params['username']
   where_user_came_from = session[:previous_url] || '/'
@@ -195,20 +189,19 @@ get '/secure/place' do
   erb 'This is a secret place that only <%=session[:identity]%> has access to!'
 end
 
-
 get '/showusers' do
-  @usersdata = []
+  @users_data = []
   db = get_db
   db.execute 'SELECT * FROM USERS' do |row|
-    @usersdata << row
+    @users_data << row
   end
   # ==================================
   # variant 1
   # ==================================
   # xm = Builder::XmlMarkup.new(:indent => 2)
   # xm.table {
-  # xm.tr { @usersdata[0].keys.each { |key| xm.th(key)}}
-  # @usersdata.each { |row| xm.tr { row.values.each { |value| xm.td(value)}}}
+  # xm.tr { @users_data[0].keys.each { |key| xm.th(key)}}
+  # @users_data.each { |row| xm.tr { row.values.each { |value| xm.td(value)}}}
   # }
   # erb "#{xm}"
 
@@ -221,10 +214,10 @@ get '/showusers' do
     end
   end
 
-  if @usersdata[0]
-    @headers = "<tr>#{@usersdata[0].keys.to_cells('th')}</tr>"
+  if @users_data[0]
+    @headers = "<tr>#{@users_data[0].keys.to_cells('th')}</tr>"
 
-    @cells = @usersdata.map do |row|
+    @cells = @users_data.map do |row|
       "<tr>#{row.values.to_cells('td')}</tr>"
     end.join("\n  ")
   end
