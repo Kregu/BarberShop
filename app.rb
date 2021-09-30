@@ -202,9 +202,9 @@ get '/showusers' do
   db.execute 'SELECT * FROM USERS' do |row|
     @usersdata << row
   end
-# ==================================
-# variant 1
-# ==================================
+  # ==================================
+  # variant 1
+  # ==================================
   # xm = Builder::XmlMarkup.new(:indent => 2)
   # xm.table {
   # xm.tr { @usersdata[0].keys.each { |key| xm.th(key)}}
@@ -212,12 +212,12 @@ get '/showusers' do
   # }
   # erb "#{xm}"
 
-# ==================================
-# variant 2
-# ==================================
+  # ==================================
+  # variant 2
+  # ==================================
   class Array
     def to_cells(tag)
-      self.map { |c| "<#{tag}>#{c}</#{tag}>" }.join
+      map { |c| "<#{tag}>#{c}</#{tag}>" }.join
     end
   end
 
