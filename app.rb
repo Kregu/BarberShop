@@ -47,7 +47,7 @@ end
 
 helpers do
   def username
-    session[:identity] ? session[:identity] : 'Hello stranger'
+    session[:identity] || 'Hello stranger'
   end
 end
 
@@ -101,8 +101,8 @@ post '/visit' do
 
   @client_name.capitalize!
 
-  hh = {client_name: "You did't enter your name",
-        client_phone: "You did't enter your phone",
+  hh = {client_name: "You didn't enter your name",
+        client_phone: "You didn't enter your phone",
         date_time: 'Wrong date and time'
       }
 
