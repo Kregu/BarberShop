@@ -1,0 +1,21 @@
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <% @users_data[0].keys.each do |key| %>
+        <th><%=key%></th>
+      <% end %>
+    </tr>
+  </thead>
+  <tbody>
+      <% @users_data.each do |item| %>
+        <tr>
+            <td><%=item["Id"]%></td>
+            <td><%=item["Name"]%></td>
+            <td><%=item["Phone"]%></td>
+            <td><%=item["DateStamp"]%>}</td>
+            <td><%=item["Barber"]%></td>
+            <td style="background-color:<%= item["Color"]%>"><%=item["Color"]%></td>
+          <% end %>
+        </tr>
+  </tbody>
+</table>

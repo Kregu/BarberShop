@@ -189,39 +189,11 @@ get '/secure/place' do
   erb 'This is a secret place that only <%=session[:identity]%> has access to!'
 end
 
-get '/showusers' do
-  @users_data = []
+get '/show_users' do
   db = get_db
-  db.execute 'SELECT * FROM USERS' do |row|
-    @users_data << row
-  end
-  # ==================================
-  # variant 1
-  # ==================================
-  # xm = Builder::XmlMarkup.new(:indent => 2)
-  # xm.table {
-  # xm.tr { @users_data[0].keys.each { |key| xm.th(key)}}
-  # @users_data.each { |row| xm.tr { row.values.each { |value| xm.td(value)}}}
-  # }
-  # erb "#{xm}"
-
-  # ==================================
-  # variant 2
-  # ==================================
-  class Array
-    def to_cells(tag)
-      map { |c| "<#{tag}>#{c}</#{tag}>" }.join
-    end
-  end
-
-  if @users_data[0]
-    @headers = "<tr>#{@users_data[0].keys.to_cells('th')}</tr>"
-
-    @cells = @users_data.map do |row|
-      "<tr>#{row.values.to_cells('td')}</tr>"
-    end.join("\n  ")
-  end
-
-  erb :showusers
-
+  @users_data = db.execute 'SELECT * FROM USERS'
+  erb :show_users
 end
+
+
+
